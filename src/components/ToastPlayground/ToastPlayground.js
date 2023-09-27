@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
 import ToastShelf from "../ToastShelf";
+import { ToastContext } from "../ToastProvider";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [toasts, setToasts] = useState([]);
+  const { addToast } = useContext(ToastContext);
   const [message, setMessage] = useState("");
   const [selectedVariant, setSelectedVariant] = useState(VARIANT_OPTIONS[0]);
 
@@ -17,15 +18,7 @@ function ToastPlayground() {
   }
 
   function handleAddToast() {
-    setToasts((previousToasts) => [
-      ...previousToasts,
-      {
-        id: crypto.randomUUID(),
-        message,
-        variant: selectedVariant,
-      },
-    ]);
-
+    addToast({ message, selectedVariant });
     setMessage("");
     setSelectedVariant(VARIANT_OPTIONS[0]);
   }
@@ -37,7 +30,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toasts} setToasts={setToasts} />
+      <ToastShelf />
 
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>

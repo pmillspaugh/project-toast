@@ -18,7 +18,7 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ message, variant, setShowToast }) {
+function Toast({ id, message, variant, handleRemoveToast }) {
   // polymorphism FTW!
   const Icon = ICONS_BY_VARIANT[variant];
 
@@ -30,7 +30,7 @@ function Toast({ message, variant, setShowToast }) {
       <p className={styles.content}>{message}</p>
       <button
         className={styles.closeButton}
-        onClick={() => setShowToast(false)}
+        onClick={() => handleRemoveToast(id)}
       >
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>

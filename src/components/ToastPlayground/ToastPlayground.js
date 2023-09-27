@@ -3,17 +3,31 @@ import React, { useState } from "react";
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
-import Toast from "../Toast";
+import ToastShelf from "../ToastShelf";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [showToast, setShowToast] = useState(false);
+  const [toasts, setToasts] = useState([]);
   const [message, setMessage] = useState("");
   const [selectedVariant, setSelectedVariant] = useState(VARIANT_OPTIONS[0]);
 
   function handleMessageChange(event) {
     setMessage(event.target.value);
+  }
+
+  function handleAddToast() {
+    setToasts((previousToasts) => [
+      ...previousToasts,
+      {
+        id: crypto.randomUUID(),
+        message,
+        variant: selectedVariant,
+      },
+    ]);
+
+    setMessage("");
+    setSelectedVariant(VARIANT_OPTIONS[0]);
   }
 
   return (
@@ -23,13 +37,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {showToast && (
-        <Toast
-          message={message}
-          variant={selectedVariant}
-          setShowToast={setShowToast}
-        />
-      )}
+      <ToastShelf toasts={toasts} setToasts={setToasts} />
 
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
@@ -72,7 +80,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => setShowToast(true)}>Pop Toast!</Button>
+            <Button onClick={handleAddToast}>Pop Toast!</Button>
           </div>
         </div>
       </div>
